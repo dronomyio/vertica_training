@@ -1,1 +1,74 @@
+Video:
 https://share.icloud.com/photos/0eabGmduY78d_VFPvHM6NbqRA
+
+
+
+Command to see projection created:
+select export_objects('/tmp/pool_reserves.txt','public.pool_reserves');
+
+to save to a file : /tmp/pool_reserves.txt
+
+OR std output dispaly:
+
+select export_objects
+testdb-> ('','public.pool_reserves');
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           export_objects                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+
+CREATE TABLE public.pool_reserves
+(
+    reserve_id  IDENTITY ,
+    pool_address varchar(42),
+    dex varchar(50),
+    token0 varchar(42),
+    token1 varchar(42),
+    reserve0 varchar(100),
+    reserve1 varchar(100),
+    block_number int,
+    "timestamp" int,
+    recorded_at timestamp DEFAULT now()
+);
+
+
+CREATE PROJECTION public.pool_reserves_super /*+basename(pool_reserves),createtype(L)*/ 
+(
+ reserve_id,
+ pool_address,
+ dex,
+ token0,
+ token1,
+ reserve0,
+ reserve1,
+ block_number,
+ "timestamp",
+ recorded_at
+)
+AS
+ SELECT pool_reserves.reserve_id,
+        pool_reserves.pool_address,
+        pool_reserves.dex,
+        pool_reserves.token0,
+        pool_reserves.token1,
+        pool_reserves.reserve0,
+        pool_reserves.reserve1,
+        pool_reserves.block_number,
+        pool_reserves."timestamp",
+        pool_reserves.recorded_at
+ FROM public.pool_reserves
+ ORDER BY pool_reserves.reserve_id,
+          pool_reserves.pool_address,
+          pool_reserves.dex,
+          pool_reserves.token0,
+          pool_reserves.token1,
+          pool_reserves.reserve0,
+          pool_reserves.reserve1,
+          pool_reserves.block_number
+SEGMENTED BY hash(pool_reserves.reserve_id, pool_reserves.block_number, pool_reserves."timestamp", pool_reserves.recorded_at, pool_reserves.pool_address, pool_reserves.token0, pool_reserves.token1, pool_reserves.dex) ALL NODES OFFSET 0;
+
+
+SELECT MARK_DESIGN_KSAFE(0);
+
+(1 row)
+
+testdb=>
