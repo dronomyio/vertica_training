@@ -1,0 +1,17 @@
+Thanks for joining the meeting today.
+Please find attached the documentation for topics covered today.
+Also, please refer to below link for Vertica Documentation for Best Practices for managing workloads and Resource Pools.
+https://docs.vertica.com/24.2.x/en/admin/managing-db/managing-workloads/workload-best-practices/
+https://www.vertica.com/kb/BestPracticesforManagingResourcePools/Content/BestPractices/BestPractice…
+Regards,
+Mazhar Khan
+
+
+https://docs.vertica.com/25.2.x/en/admin/backup-and-restore/vbr-reference/`
+https://docs.vertica.com/25.3.x/en/admin/db-users-and-privileges/access-policies/
+
+
+vbr -t backup -c full_backup.ini
+
+
+SELECT COPY_TABLE ( 'public.product_dimension', 'public.newtable');
