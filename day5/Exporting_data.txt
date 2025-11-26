@@ -1,0 +1,21 @@
+1. Extract table data to csv file 
+
+vsql -U dbadmin -w vertica -d vertica_db \
+-c "select * from public.customer_dimension" \
+-o /home/dbadmin/customer_dimension.csv \
+-F',' --no-align
+
+2. Exporting Data using Export to Delimited
+
+ EXPORT TO DELIMITED(directory='/home/dbadmin/customer_dimension',filename = 'cutomer_dimension' , delimiter=',', addHeader='true')  AS SELECT * FROM public.customer_dimension;
+ 
+ Exporing data and grouping them in separate files using over clause
+ EXPORT TO DELIMITED(directory='/home/dbadmin/customer_dimension' , delimiter=',', addHeader='true') OVER(PARTITION BY customer_type)  AS SELECT * FROM public.customer_dimension;
+
+3. Exporting data to other formats
+
+ EXPORT TO JSON(directory='/home/dbadmin/customer_dimension4',filename = 'cutomer_dimension')  AS SELECT * FROM public.customer_dimension;
+ 
+ EXPORT TO ORC(directory='/home/dbadmin/customer_dimension5',filename = 'cutomer_dimension')  AS SELECT * FROM public.customer_dimension;
+ 
+ EXPORT TO PARQUET(directory='/home/dbadmin/customer_dimension6',filename = 'cutomer_dimension')  AS SELECT * FROM public.customer_dimension;

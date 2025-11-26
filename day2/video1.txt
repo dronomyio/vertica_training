@@ -1,3 +1,8 @@
 https://share.icloud.com/photos/05euFFv6m0-YhLcBK5Ke2iVLw
 
 
+1. AWS - eon mode S3 bucket for storage with replication option.
+
+2. enterprise mode - the node is on the machine with storage
+
+
